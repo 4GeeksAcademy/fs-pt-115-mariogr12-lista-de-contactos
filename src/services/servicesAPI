@@ -1,7 +1,0 @@
-export const crearContacto = () => {
-
-}
-
-export const borrarContacto = () => {
-    
-}
