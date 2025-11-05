@@ -2,10 +2,18 @@
     text-decoration: none;
 }
 
-.titulo-navbar{
+.boton{
     color: black;
+    background-color: transparent;
+    border: none;
 }
 
-.titulo-navbar:hover{
-    color: rgb(56, 56, 56) !important; 
+.foto{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.boton:hover{
+    color: rgb(77, 77, 77) !important; 
 }
