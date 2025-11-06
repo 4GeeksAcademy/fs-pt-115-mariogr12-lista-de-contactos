@@ -1,12 +1,15 @@
-import { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import { crearContacto } from "../services/servicesAPI";
+import { useEffect, useState } from "react";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { crearContacto, editarContacto, getContactos } from "../services/servicesAPI";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 
 
 export const AnhadirEditarContacto = () => {
 
+    const { id } = useParams()
+
     const { store, dispatch } = useGlobalReducer()
+    const [isEditing, setIsEditing] = useState(false)
     const navigate = useNavigate()
 
     const [nuevoContacto, setNuevoContacto] = useState({
@@ -30,14 +33,31 @@ export const AnhadirEditarContacto = () => {
             setTimeout(() => setShowAlert(false), 2000)
             return
         }
-        crearContacto(nuevoContacto, setNuevoContacto, dispatch)
-        navigate(`/`)
+        if (isEditing) {
+            editarContacto(id, nuevoContacto, dispatch, navigate)
+        } else {
+            crearContacto(nuevoContacto, setNuevoContacto, dispatch)
+        }
 
+        navigate(`/`)
     }
+
+    useEffect(() => {
+        if (id && store.contactos.length > 0) {
+            setIsEditing(true)
+            setNuevoContacto(store.contactos.filter(contacto => contacto.id == Number(id))[0])
+        }
+    }, [id, store.contactos])
 
     return (
         <div className="container border mx-auto mt-4 p-4 border rounded-2">
             <h2 className="text-center">Añadir un nuevo contacto</h2>
+
+            {showAlert && (
+                <div className="alert alert-warning" role="alert">
+                    Todos los campos son obligatorios
+                </div>
+            )}
 
             <form onSubmit={handleSubmit}>
 
@@ -49,7 +69,7 @@ export const AnhadirEditarContacto = () => {
                         id="nombreCompleto"
                         placeholder="Nombre completo"
                         name="name"
-                        value={nuevoContacto.nombreCompleto}
+                        value={nuevoContacto.name}
                         onChange={handleInputChange} />
                 </div>
                 <div className="mb-3">
@@ -60,7 +80,7 @@ export const AnhadirEditarContacto = () => {
                         id="direccion"
                         placeholder="Dirección"
                         name="address"
-                        value={nuevoContacto.direccion}
+                        value={nuevoContacto.address}
                         onChange={handleInputChange} />
                 </div>
                 <div className="mb-3">
@@ -71,7 +91,7 @@ export const AnhadirEditarContacto = () => {
                         id="telefono"
                         placeholder="Teléfono"
                         name="phone"
-                        value={nuevoContacto.telefono}
+                        value={nuevoContacto.phone}
                         onChange={handleInputChange} />
                 </div>
                 <div className="mb-3">

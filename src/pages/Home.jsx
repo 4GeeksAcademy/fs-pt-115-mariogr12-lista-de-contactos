@@ -24,7 +24,7 @@ export const Home = () => {
 								<div className="d-flex justify-content-between w-100">
 									<h5>{contacto.name}</h5>
 									<div>
-										<Link to="/nuevo-contacto">
+										<Link to={`/editar-contacto/${contacto.id}`}>
 											<button className="me-3 boton" onClick={()=>{}}>
 												<i className="bi bi-pencil-fill"></i>
 											</button>
